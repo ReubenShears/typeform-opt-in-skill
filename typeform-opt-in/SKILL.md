@@ -60,9 +60,11 @@ List `Client Data` (table `1000911`), find the row whose `Client ID` matches the
   else parse it from the **Offer** free-text field (e.g. "...need a solid base (over 20k/mo)..." → `$20k/mo`).
 - **Base Funnel Domain** → the root for the redirects, e.g. `https://www.client.com`. Resolve in order:
   (1) use `base_domain` if a parent passed it; (2) else read **`Base Funnel Domain`** from the client row;
-  (3) else — headless with no value — **predict it by intuition** from the client's website/company
-  (e.g. `https://www.<company>.com`), the same placeholder strategy the funnel build uses, and flag it
-  in the final report. Never block waiting for a human.
+  (3) else build with the best domain available and treat the redirects as **provisional**: predict a
+  domain by intuition (e.g. `https://www.<company>.com`) so nothing blocks, and flag it. The two redirect
+  endings keep stable refs `end_confirmed` / `end_uq` (both `url_redirect`), so a parent that publishes
+  the funnel (e.g. `framer-vsl-funnel`) can repoint them to the real live domain afterwards with a single
+  `TYPEFORM_UPDATE_FORM`. Never block waiting for a human.
 
 Use the rest of the row (Best Product/Service, Pain Points, Consistent Client Persona, Industry)
 as *context* to write answer options that actually fit this client's audience.
