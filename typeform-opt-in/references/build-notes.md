@@ -56,7 +56,7 @@ then fix routing/endings in the update. Minimal viable create:
 ## Step 2 — UPDATE_FORM (the real structure, with stable refs + routing)
 
 This is the call that does the work. Note: `fields` use stable `ref`s; the Q3 disqualifying
-choice gets `ref: "rev_dq"`; the two redirect endings get `ref`s `end_confirmed` / `end_uq`; the
+choice gets `ref: "rev_dq"`; the two redirect endings get `ref`s `end_qualified` / `end_unqualified`; the
 logic references those.
 
 ```json
@@ -94,10 +94,10 @@ logic references those.
                    {"label": "$<hi>k+/mo", "ref": "rev_b4"}]}}
   ],
   "thankyou_screens": [
-    {"ref": "end_confirmed", "title": "Redirect to /confirmed (qualified)",
-     "type": "url_redirect", "properties": {"redirect_url": "<domain>/confirmed"}},
-    {"ref": "end_uq", "title": "Redirect to /uq-confirmed (unqualified)",
-     "type": "url_redirect", "properties": {"redirect_url": "<domain>/uq-confirmed"}},
+    {"ref": "end_qualified", "title": "Qualified Calendar",
+     "type": "url_redirect", "properties": {"redirect_url": "<Qualified Calendar URL, else https://www.calendly.com>"}},
+    {"ref": "end_unqualified", "title": "Unqualified Calendar",
+     "type": "url_redirect", "properties": {"redirect_url": "<Unqualified Calendar URL, else https://www.calendly.com>"}},
     {"ref": "default_tys", "title": "All done! Thanks for your time.",
      "type": "thankyou_screen", "properties": {"show_button": false, "share_icons": false}}
   ],
@@ -106,9 +106,9 @@ logic references those.
       {"action": "jump",
        "condition": {"op": "is", "vars": [
          {"type": "field", "value": "q3_revenue"}, {"type": "choice", "value": "rev_dq"}]},
-       "details": {"to": {"type": "thankyou", "value": "end_uq"}}},
+       "details": {"to": {"type": "thankyou", "value": "end_unqualified"}}},
       {"action": "jump", "condition": {"op": "always", "vars": []},
-       "details": {"to": {"type": "thankyou", "value": "end_confirmed"}}}
+       "details": {"to": {"type": "thankyou", "value": "end_qualified"}}}
     ]}
   ]
 }

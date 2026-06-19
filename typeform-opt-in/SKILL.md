@@ -3,7 +3,7 @@ name: typeform-opt-in
 description: >-
   Build a calibrated client opt-in Typeform in the Optimally Typeform account end to end
   (3 qualification questions, ICP-calibrated revenue brackets, disqualification routing,
-  /confirmed vs /uq-confirmed redirects, hidden URL params, and the lead-survey webhook),
+  Qualified/Unqualified Calendar redirects, hidden URL params, and the lead-survey webhook),
   driven by a single client identifier. Use this WHENEVER the user wants to create, build,
   clone, or calibrate a client opt-in form / opt-in survey / lead-qualification Typeform for
   a funnel — e.g. "build the opt-in for Disruptors", "make ExitEngine's Typeform", "clone the
@@ -16,23 +16,21 @@ description: >-
 # Typeform Opt-In Builder
 
 Builds the standard Optimally client opt-in form via the Composio Typeform tools. The opt-in is
-a 3-question lead-qualification survey that pixels/redirects qualified leads to `/confirmed` and
-quietly routes the worst leads to `/uq-confirmed` (so you don't waste pixel/ad signal on them).
-Every client form lives in the **Optimally** Typeform account — never the client's own.
+a 3-question lead-qualification survey that redirects qualified leads to the **Qualified Calendar**
+(Calendly) and routes the worst leads to the **Unqualified Calendar**, so booking energy and ad/pixel
+signal go to the right place. Funnel flow: opt-in → Typeform → Calendly → confirmation page. Every client
+form lives in the **Optimally** Typeform account — never the client's own.
 
 ## Input contract (so other skills can call this)
 
 The only **required** input is the client's **Client ID** — the `UPPERCASE_SNAKE` value in the
 Baserow `Client Data` table (e.g. `DISRUPTORS_MEDIA`). Everything else can be read from that row.
 
-**Optional pass-through inputs** — if a parent skill already has these, it should pass them so this
-skill doesn't re-derive them (and so a headless run never stalls):
-- `base_domain` — the funnel root, e.g. `https://www.client.com`. A parent like `framer-vsl-funnel`
-  already knows this (it builds `<domain>/typeform`), so it should hand it over.
-- `icp_min_revenue` — the ICP minimum monthly revenue (drives Q3 brackets), if already parsed.
-
-A parent invokes this by passing the Client ID (plus any optional values above) and reading back the
-new form's public URL, which this skill writes to the client's `Typeform URL` Baserow field.
+Everything this skill needs lives in that one row: `Company`, the qualification context (`Offer`,
+`Pain Points`, etc.), and the **`Qualified Calendar URL`** / **`Unqualified Calendar URL`** the form
+redirects to. It writes the new form's public URL back to the row's **`Typeform URL`** field. So a parent
+skill (e.g. `framer-vsl-funnel`) invokes it with just the Client ID and reads `Typeform URL` back — no
+other inputs needed.
 
 ## Prerequisites
 
@@ -56,18 +54,18 @@ your first build; the API has several traps that will waste a build if you don't
 List `Client Data` (table `1000911`), find the row whose `Client ID` matches the input. Pull:
 - **Company** → the form title becomes `<short brand name> | Opt-In` (match the existing
   naming, e.g. `Tradeflow | Opt-In`, not the legal name).
-- **ICP minimum monthly revenue** (drives Q3's brackets) → use `icp_min_revenue` if a parent passed it;
-  else parse it from the **Offer** free-text field (e.g. "...need a solid base (over 20k/mo)..." → `$20k/mo`).
-- **Base Funnel Domain** → the root for the redirects, e.g. `https://www.client.com`. Resolve in order:
-  (1) use `base_domain` if a parent passed it; (2) else read **`Base Funnel Domain`** from the client row;
-  (3) else build with the best domain available and treat the redirects as **provisional**: predict a
-  domain by intuition (e.g. `https://www.<company>.com`) so nothing blocks, and flag it. The two redirect
-  endings keep stable refs `end_confirmed` / `end_uq` (both `url_redirect`), so a parent that publishes
-  the funnel (e.g. `framer-vsl-funnel`) can repoint them to the real live domain afterwards with a single
-  `TYPEFORM_UPDATE_FORM`. Never block waiting for a human.
+- **ICP minimum monthly revenue** (drives Q3's brackets) → **estimate** it from the client's ICP signals.
+  The **`Offer`** field often states it outright (e.g. "...need a solid base (over 20k/mo)..." → `$20k/mo`);
+  otherwise infer from `Consistent Client Persona`, `ICP Examples`, `Current Monthly Revenue`,
+  `Desired Monthly Revenue`, `Industry`, and `Best Product/Service`. **Do NOT use `Floor Amount`** — that
+  is Optimally's retainer floor with the client (agency pricing), not the lead's revenue. If nothing in the
+  row implies an ICP, make a sensible industry-appropriate estimate and flag it in the report.
+- **`Qualified Calendar URL`** and **`Unqualified Calendar URL`** → the Calendly links the form redirects
+  to (Step 5). Usually empty at build time (the human sets Calendly up during the manual finish), so treat
+  them as optional: empty just means use the clearly-labelled `https://www.calendly.com` placeholder.
 
-Use the rest of the row (Best Product/Service, Pain Points, Consistent Client Persona, Industry)
-as *context* to write answer options that actually fit this client's audience.
+Use the rest of the row (Best Product/Service, Pain Points, Frequent Objections, Main Bottleneck,
+Consistent Client Persona, Industry) as *context* to write answer options that fit this client's audience.
 
 ### Step 2 — Calibrate the 3 questions
 
@@ -83,7 +81,7 @@ Keep the three-part structure; tailor the wording and answers to the client:
    then `$10k to $20k/mo`, `$20k to $50k/mo`, `$50k+/mo`.
 
 The reason for the ½-ICP line: a lead at, say, $15k against a $20k ICP is still worth pixeling
-and nurturing; only the leads at less than half the floor are clearly unworkable.
+and nurturing; only the leads at less than half that ICP line are clearly unworkable.
 
 ### Step 3 — Copy rules (non-negotiable)
 
@@ -113,19 +111,24 @@ theme `https://api.typeform.com/themes/M2ZyLjyp`, `show_typeform_branding: false
 1. `TYPEFORM_CREATE_FORM` with the fields + a single `default_tys` ending. Capture the new
    `form_id`.
 2. `TYPEFORM_UPDATE_FORM` with the full final structure using **your own stable refs** for the
-   endings (`end_confirmed`, `end_uq`) and for the Q3 disqualifying choice (`rev_dq`). On update,
+   endings (`end_qualified`, `end_unqualified`) and for the Q3 disqualifying choice (`rev_dq`). On update,
    custom refs are preserved, so the logic can reference them reliably.
 
-### Step 5 — Endings + disqualification routing
+### Step 5 — Endings + disqualification routing (redirect to Calendly)
 
-Build two `url_redirect` endings from `Base Funnel Domain` (note the consistent `/` convention):
-- `end_confirmed` → `<domain>/confirmed`, titled by action e.g. `Redirect to /confirmed (qualified)`
-- `end_uq` → `<domain>/uq-confirmed`, titled e.g. `Redirect to /uq-confirmed (unqualified)`
+The funnel flow is opt-in → Typeform → **Calendly** → confirmation page. So the two `url_redirect`
+endings send leads to the client's Calendly calendars (Calendly itself then redirects to `/confirmed` /
+`/uq-confirmed` after booking — that redirect is set in the Calendly UI, not here). Build:
+- `end_qualified` → titled **`Qualified Calendar`**; `redirect_url` = the row's `Qualified Calendar URL`
+  if set, else the placeholder `https://www.calendly.com`.
+- `end_unqualified` → titled **`Unqualified Calendar`**; `redirect_url` = the row's
+  `Unqualified Calendar URL` if set, else `https://www.calendly.com`.
 
-(Keep a `default_tys` screen too; Typeform requires a default.)
+The clear ending titles tell the human exactly which Calendly link to paste if the placeholder is still
+there. (Keep a `default_tys` screen too; Typeform requires a default.)
 
-Logic on Q3: first action routes the **lowest** bracket (`rev_dq`) to `end_uq`; a fallback
-`always` action routes everyone else to `end_confirmed`. Exact JSON is in build-notes.
+Logic on Q3: first action routes the **lowest** bracket (`rev_dq`) to `end_unqualified`; a fallback
+`always` action routes everyone else to `end_qualified`. Exact JSON is in build-notes.
 
 ### Step 6 — Apply the webhook (get the URL from the template, never hardcode)
 
@@ -152,13 +155,14 @@ Update the client's `Typeform URL` field in `Client Data` with the new form's pu
 
 ### Step 8 — Report what's done and what's manual
 
-Confirm: questions, brackets (and the DQ line), both redirects, hidden params, webhook. Flag the
-one manual step: the `{{full_name}}` greeting personalisation (editor only). If `Base Funnel Domain`
-was missing or on the wrong row, say so.
+Confirm: questions, brackets (and the DQ line), both Calendar redirects (real URL or the labelled
+`calendly.com` placeholder), hidden params, webhook. Flag the manual steps: the `{{full_name}}` greeting
+personalisation (editor only); and if either Calendar redirect is still the placeholder, that the human
+pastes the real Calendly link and sets that calendar's post-booking redirect to the confirmation page.
 
 ## Verify before declaring done
 
 `TYPEFORM_GET_FORM` the new form and check: `hidden` contains full_name + email; Q3 logic has the
-DQ jump to `end_uq` and the fallback to `end_confirmed`; both endings are `type: url_redirect` with
-the right URLs; no stray "Webhook Link" slide; no commas or dashes in any label. Then
-`TYPEFORM_LIST_WEBHOOKS` to confirm `lead-survey` is enabled.
+DQ jump to `end_unqualified` and the fallback to `end_qualified`; both endings are `type: url_redirect`
+titled `Qualified Calendar` / `Unqualified Calendar`; no stray "Webhook Link" slide; no commas or dashes
+in any label. Then `TYPEFORM_LIST_WEBHOOKS` to confirm `lead-survey` is enabled.
