@@ -30,7 +30,8 @@ Copy the `typeform-opt-in/` directory into your Claude skills directory.
 
 - A Composio Typeform connection (the skill assumes the `optimally-internal` account alias)
 - Baserow access to the `Client Data` table
-- The `lead-survey` n8n webhook endpoint is replaced with a placeholder in this public copy —
-  set it to your own n8n webhook.
+- The live `lead-survey` n8n webhook endpoint is **not** hardcoded here. At build time the skill reads
+  it from the Optimally `DUPLICATE FOR OPT-IN` Typeform template (the "Webhook Link" marker slide), so
+  the public copy needs no secret and stays in sync with the source.
 
 Built by Optimally.

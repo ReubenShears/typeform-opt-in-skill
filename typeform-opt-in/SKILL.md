@@ -111,12 +111,23 @@ Build two `url_redirect` endings from `Base Funnel Domain` (note the consistent 
 Logic on Q3: first action routes the **lowest** bracket (`rev_dq`) to `end_uq`; a fallback
 `always` action routes everyone else to `end_confirmed`. Exact JSON is in build-notes.
 
-### Step 6 — Apply the webhook
+### Step 6 — Apply the webhook (get the URL from the template, never hardcode)
 
-`TYPEFORM_CREATE_OR_UPDATE_WEBHOOK` with:
-`form_id` = the new form, `tag` = `lead-survey`, `url` = your n8n lead-survey webhook endpoint
-(`https://<YOUR-N8N-HOST>/webhook/lead-survey`), `enabled` = true. The same endpoint is correct for
-every client (it keys off the form/hidden fields downstream).
+The live n8n `lead-survey` endpoint is stored as a **marker inside the template form** — that is the
+single source of truth (which is why this skill never hardcodes it, and why this public copy is safe
+to share). Retrieve it at build time:
+
+1. `TYPEFORM_GET_FORM` the `DUPLICATE FOR OPT-IN` template, form id **`ErAr5UtG`** (account
+   `optimally-internal`).
+2. Find the field with `type: "statement"` titled `Webhook Link 👇` and read its
+   `properties.description` — that string is the live webhook URL.
+3. `TYPEFORM_CREATE_OR_UPDATE_WEBHOOK` with `form_id` = the new form, `tag` = `lead-survey`,
+   `url` = the URL you just read, `enabled` = true.
+
+Reading it from the template (rather than a constant) means: the public copy works without secrets,
+and if Optimally ever changes the n8n endpoint, they update the template slide once and every future
+build picks it up. The same endpoint is correct for every client (it keys off the form/hidden fields
+downstream). Do NOT add a "Webhook Link" slide to the new form — it's a template marker only.
 
 ### Step 7 — Write the URL back to Baserow (composability)
 

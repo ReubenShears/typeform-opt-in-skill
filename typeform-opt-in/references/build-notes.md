@@ -112,14 +112,20 @@ logic references those.
 }
 ```
 
-## Step 3 — Webhook
+## Step 3 — Webhook (url read from the template slide)
+
+First read the URL from the template (`TYPEFORM_GET_FORM` form `ErAr5UtG`, then the `Webhook Link 👇`
+statement field's `properties.description`). Then:
 
 ```json
 {"form_id": "<new form id>", "tag": "lead-survey",
- "url": "https://<YOUR-N8N-HOST>/webhook/lead-survey", "enabled": true}
+ "url": "<url read from the DUPLICATE FOR OPT-IN 'Webhook Link' slide>", "enabled": true}
 ```
-Deleting/omitting the "Webhook Link" slide does NOT remove the webhook — the webhook is a form-level
-config, independent of fields.
+
+Why read it from the template instead of a constant: the public copy of this skill has the real URL
+redacted, and the template carries the live value, so this works with no extra config and survives the
+endpoint changing. Deleting/omitting the "Webhook Link" slide from the NEW form does NOT remove the
+webhook — the webhook is form-level config, independent of fields.
 
 ## Notes
 - The template to mirror structurally is `DUPLICATE FOR OPT-IN`, but its choices are placeholder
