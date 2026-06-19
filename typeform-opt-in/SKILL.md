@@ -22,16 +22,27 @@ Every client form lives in the **Optimally** Typeform account — never the clie
 
 ## Input contract (so other skills can call this)
 
-The only required input is the client's **Client ID** — the `UPPERCASE_SNAKE` value in the
-Baserow `Client Data` table (e.g. `DISRUPTORS_MEDIA`). Everything else is read from that row.
+The only **required** input is the client's **Client ID** — the `UPPERCASE_SNAKE` value in the
+Baserow `Client Data` table (e.g. `DISRUPTORS_MEDIA`). Everything else can be read from that row.
 
-A parent skill invokes this by passing the Client ID and (optionally) reading back the
+**Optional pass-through inputs** — if a parent skill already has these, it should pass them so this
+skill doesn't re-derive them (and so a headless run never stalls):
+- `base_domain` — the funnel root, e.g. `https://www.client.com`. A parent like `framer-vsl-funnel`
+  already knows this (it builds `<domain>/typeform`), so it should hand it over.
+- `icp_min_revenue` — the ICP minimum monthly revenue (drives Q3 brackets), if already parsed.
+
+A parent invokes this by passing the Client ID (plus any optional values above) and reading back the
 new form's public URL, which this skill writes to the client's `Typeform URL` Baserow field.
 
 ## Prerequisites
 
-- The Composio Typeform connection must be active under alias **`optimally-internal`**.
-  **Every** `TYPEFORM_*` tool call needs `account: "optimally-internal"` (explicit selection is on).
+- The Composio Typeform connection must be active under alias **`optimally-internal`** (the Optimally
+  Typeform account), reachable via the `u=optimally` operator connector.
+- **How the calls run:** the `TYPEFORM_*` tools execute through Composio's
+  **`COMPOSIO_MULTI_EXECUTE_TOOL`** — each call passes the tool slug (e.g. `TYPEFORM_CREATE_FORM`) **and**
+  `account: "optimally-internal"`. Explicit account selection is ON, so a call without the account errors
+  rather than guessing. Wherever this skill says "call `TYPEFORM_X`", that means a
+  `COMPOSIO_MULTI_EXECUTE_TOOL` run of `TYPEFORM_X` with that account.
 - Baserow MCP access to `Client Data` (table id `1000911`).
 
 If you need the exact API payloads, refer to `references/build-notes.md` — it has copy-paste
@@ -45,10 +56,13 @@ your first build; the API has several traps that will waste a build if you don't
 List `Client Data` (table `1000911`), find the row whose `Client ID` matches the input. Pull:
 - **Company** → the form title becomes `<short brand name> | Opt-In` (match the existing
   naming, e.g. `Tradeflow | Opt-In`, not the legal name).
-- **Offer** (free text) → parse the **ICP minimum monthly revenue** from it
-  (e.g. "...need a solid base (over 20k/mo)..." → `$20k/mo`). This drives Q3's brackets.
-- **Base Funnel Domain** → the root for the redirects, e.g. `https://www.client.com`.
-  If it's blank, ask the user for it before continuing (the redirects can't be built without it).
+- **ICP minimum monthly revenue** (drives Q3's brackets) → use `icp_min_revenue` if a parent passed it;
+  else parse it from the **Offer** free-text field (e.g. "...need a solid base (over 20k/mo)..." → `$20k/mo`).
+- **Base Funnel Domain** → the root for the redirects, e.g. `https://www.client.com`. Resolve in order:
+  (1) use `base_domain` if a parent passed it; (2) else read **`Base Funnel Domain`** from the client row;
+  (3) else — headless with no value — **predict it by intuition** from the client's website/company
+  (e.g. `https://www.<company>.com`), the same placeholder strategy the funnel build uses, and flag it
+  in the final report. Never block waiting for a human.
 
 Use the rest of the row (Best Product/Service, Pain Points, Consistent Client Persona, Industry)
 as *context* to write answer options that actually fit this client's audience.

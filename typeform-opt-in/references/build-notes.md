@@ -24,8 +24,10 @@ Typeform tools with `account: "optimally-internal"`.
    `/settings/*`, `/theme`, `/title`, `/workspace`, `/field_reference`. For logic/fields/endings,
    use `UPDATE_FORM` (full PUT — include the whole definition or fields get deleted).
 
-5. **Explicit account every call.** Multi-account selection is on, so omit `account` and the call
-   errors. Always pass `account: "optimally-internal"`.
+5. **Every call runs through `COMPOSIO_MULTI_EXECUTE_TOOL` with an explicit account.** These
+   `TYPEFORM_*` tools are executed via Composio's `COMPOSIO_MULTI_EXECUTE_TOOL` (tool slug + args).
+   Multi-account selection is on, so every call must pass `account: "optimally-internal"` — omit it and
+   the call errors rather than guessing the wrong account.
 
 ## Step 1 — CREATE_FORM (minimal, just to get a form_id)
 
