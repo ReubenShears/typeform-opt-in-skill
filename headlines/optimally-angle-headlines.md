@@ -25,31 +25,31 @@ Ads using it: V1 (Kasey, referrals)
 
 Ads using it: V2 (Kasey, $60K / $3K)
 
-1. Predictable Revenue Every Month, *Done For You And Guaranteed*
-2. Replace The Rollercoaster With *A Steady Flow Of Clients Every Month*
-3. Know Where Next Month's Revenue Is Coming From, *Every Single Month*
-4. Turn Your Best Month Into *Your Normal Month*
-5. Consistent Clients, Consistent Cash, *Without Doing The Marketing Yourself*
-6. A Client Pipeline That Never Runs Dry, *Built And Run For You*
-7. Level Out Your Revenue *In 28 Days Or You Don't Pay*
-8. Steady Months, Full Calendar, *Marketing That Pays For Itself*
-9. Make Every Month A Good Month, *Guaranteed*
-10. Even Revenue Every Month, *Done For You And It Funds Itself*
+1. Never Have A Bad Month Again. *Clients On Demand, Every Month, Guaranteed.*
+2. Lock In Your Best Month *And Make It Every Month*
+3. Your Worst Month Becomes *Your Old Best Month*
+4. The Same Number Of New Clients Every Month, *Whether You're Busy Or Not*
+5. Bank The Big Month. *Then Do It Again In 30 Days.*
+6. No More Boom And Bust. *Booked Calls On A Schedule, Paid For By Results.*
+7. Revenue You Can Forecast, *From Clients You Didn't Have To Chase*
+8. Stop Living Month To Month. *Turn On Clients When You Need Them.*
+9. Replace The Dry Spell With *A Pipeline That Books Itself Every Week*
+10. A Client Machine That Keeps Running *Even When You're Buried In Delivery*
 
 ## v3: Burned by agencies before
 
 Ads using it: V3 (Liam, $350 to $119)
 
-1. Ads That Pay For Themselves *In 28 Days Or You Don't Pay*
-2. A Positive Return On Every Ad Dollar, *Or You Don't Pay A Cent*
-3. The Agency That Only Gets Paid *When Your Ads Make You Money*
-4. Done-For-You Marketing With *A Return Guaranteed In Writing*
-5. Get Your Ad Spend Back In 28 Days, *Then Keep The Profit*
-6. Clients On Demand, *Guaranteed Or It Costs You Nothing*
-7. This Time, The Marketing *Pays For Itself. In Writing.*
-8. Profitable Ads In 28 Days, *Or You Don't Pay*
-9. An Agency That Puts Its Fee *On The Line For Your Results*
-10. Real Clients, Real Return, *Guaranteed In 28 Days*
+1. The Last Marketing Agency *You'll Ever Have To Fire*
+2. Every Other Agency Charged You To Learn. *We Only Get Paid When It Works.*
+3. You've Paid For Promises Before. *This Time You Only Pay For Results.*
+4. Retainers Without Results Are Over. *Clients In 28 Days Or You Don't Pay.*
+5. No More Paying For A Learning Phase. *Profitable Ads Or You Don't Pay.*
+6. An Agency With Skin In The Game: *Our Fee Rides On Your Return*
+7. Give Us 28 Days. *If It Doesn't Pay For Itself, You Owe Nothing.*
+8. Same Ad Budget, *Nearly Three Times The Booked Calls*
+9. Fired Your Last Agency? *The Next One Pays For Itself. Guaranteed.*
+10. Finally, An Agency That Loses Money *If You Don't Make It*
 
 ## v4: The business depends on me
 
@@ -70,16 +70,16 @@ Ads using it: V4 (Liam, outsourced)
 
 Ads using it: V5 (plateau)
 
-1. Break Through Your Revenue Ceiling *In 28 Days Or You Don't Pay*
-2. The Next Level Of Revenue, *Done For You And Guaranteed*
-3. Add A Client Channel That *Takes You Past Your Best Month*
-4. Turn Your Plateau Into *Your New Floor*
-5. More Clients Than You Can Get On Your Own, *Delivered Every Month*
-6. Unlock The Growth You've Been Stuck Under, *Guaranteed To Pay For Itself*
-7. Clients On Demand For Businesses *Ready For The Next Level*
-8. Scale Past The Ceiling *Without Working More Hours*
-9. Break The Plateau With *Marketing That Funds Itself*
-10. Your Next Revenue Record, *Built For You In 28 Days*
+1. Stuck At $30K Months? *Your First $50K Month, Done For You In 28 Days.*
+2. From $30K Months To $100K Months *Without Working More Hours*
+3. Add $20K A Month In New Clients, *Guaranteed To Pay For Itself*
+4. Your First $100K Month, *Built For You And Paid For By Results*
+5. Break $50K A Month *With Marketing That Funds Itself*
+6. 20 Extra Qualified Calls A Month *For Businesses Stuck At The Same Number*
+7. Turn Your $30K Ceiling Into *Your $30K Floor*
+8. The Client Channel That Takes You *From $40K To $100K Months*
+9. 20 More Booked Calls A Month, *Switched On In 28 Days Or You Don't Pay*
+10. $50K Months On Repeat, *Without Doing The Marketing Yourself*
 
 ## v6: Hate outreach
 
@@ -115,16 +115,16 @@ Ads using it: V7 (Kasey, 29 calls)
 
 Ads using it: V8 (four calls a month)
 
-1. A Full Calendar Of Qualified Calls *For Closers Who Just Need At-Bats*
-2. You Close. *We Fill The Calendar.*
-3. More Sales Calls Every Week, *Booked For You And Guaranteed*
-4. Give Your Closing Skills *A Calendar To Match*
-5. Qualified Sales Calls On Demand, *Paid For By The Deals They Close*
-6. A Calendar That Finally Keeps Up *With How Well You Close*
-7. Never Have A Quiet Week Again. *Qualified Calls, Done For You.*
-8. Put Your Close Rate To Work *On A Calendar That's Actually Full*
-9. Booked Calls Every Day, *Guaranteed To Pay For Themselves In 28 Days*
-10. Your Calendar Full Of Buyers, *Built And Run For You*
+1. You Close 1 In 3. *Imagine 30 Calls A Month Instead Of 4.*
+2. Great Closers Deserve A Full Calendar. *We Build It For You.*
+3. Your Close Rate Is Not The Problem. *Your Call Volume Is. We Fix That.*
+4. Stop Wasting A 40% Close Rate *On Four Calls A Month*
+5. Give A Great Closer 20 Qualified Calls A Month *And Watch What Happens*
+6. The Best Closer In Your Market *Should Never Have An Empty Calendar*
+7. You Can Close. *Now Get Enough Calls To Prove It.*
+8. Qualified Calls Every Day *For Closers Held Back By Volume, Not Skill*
+9. Turn Your Closing Skill Into *A Calendar That Pays For Itself*
+10. Four Calls A Month Is A Waste Of Your Talent. *Let's Make It Twenty.*
 
 ## v9: My clients won't buy from an ad
 
